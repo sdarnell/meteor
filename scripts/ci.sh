@@ -68,6 +68,12 @@ if should_run_test 0; then
 fi
 
 if should_run_test 1; then
+  # Sometimes the ./meteor self-test command crashes with a segmentation
+  # fault after all the tests in this group have passed. I suspect the
+  # segfault happens while removing temp directories, so let's try not
+  # doing that to see what happens.
+  export METEOR_SAVE_TMPDIRS=1
+
   echo "Running self-test (1): A-Com"
   ./meteor self-test --headless \
       --file "^[a-b]|^c[a-n]|^co[a-l]|^compiler-plugins" \
